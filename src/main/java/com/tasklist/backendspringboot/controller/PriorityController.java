@@ -1,8 +1,6 @@
 package com.tasklist.backendspringboot.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.tasklist.backendspringboot.entity.Priority;
 import com.tasklist.backendspringboot.repo.PriorityRepository;
 
@@ -32,5 +30,9 @@ public class PriorityController {
         return list; // JSON формат будет использоваться автоматически
     }
 
+    @PostMapping("/add")
+    public Priority add(@RequestBody Priority priority){
+        return priorityRepository.save(priority);
+    }
 
 }
