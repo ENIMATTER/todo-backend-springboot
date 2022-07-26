@@ -1,15 +1,11 @@
 package com.tasklist.backendspringboot.repo;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import com.tasklist.backendspringboot.entity.Category;
-
-import java.util.List;
+import com.tasklist.backendspringboot.entity.Stat;
 
 // принцип ООП: абстракция-реализация - здесь описываем все доступные способы доступа к данным
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Long> {
-
-    List<Category> findAllByOrderByTitleAsc();
+public interface StatRepository extends CrudRepository<Stat, Long> {
 
 }
