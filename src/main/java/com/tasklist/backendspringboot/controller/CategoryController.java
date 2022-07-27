@@ -1,5 +1,6 @@
 package com.tasklist.backendspringboot.controller;
 
+import com.tasklist.backendspringboot.search.CategorySearchValues;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -98,5 +99,12 @@ public class CategoryController {
         return new ResponseEntity(HttpStatus.OK); // не возвращаем удаленный объект
     }
 
+    // поиск по любым параметрам CategorySearchValues
+    @PostMapping("/search")
+    public ResponseEntity<List<Category>> search(@RequestBody CategorySearchValues categorySearchValues){
+
+        // если вместо текста будет пусто или null - вернутся все категории
+        return ResponseEntity.ok(categoryRepository.findByTitle(categorySearchValues.getText()));
+    }
 
 }
