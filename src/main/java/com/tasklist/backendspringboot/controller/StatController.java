@@ -1,5 +1,6 @@
 package com.tasklist.backendspringboot.controller;
 
+import com.tasklist.backendspringboot.util.MyLogger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,8 @@ public class StatController {
     // для статистика всгда получаем только одну строку с id=1 (согласно таблице БД)
     @GetMapping("/stat")
     public ResponseEntity<Stat> findById() {
+
+        MyLogger.showMethodName("StatController: findById() ---------------------------------------------------------- ");
 
         return  ResponseEntity.ok(statRepository.findById(defaultId).get());
     }
