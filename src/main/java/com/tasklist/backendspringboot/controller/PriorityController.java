@@ -14,6 +14,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping ("/priority") // базовый адрес
+@CrossOrigin(origins = "http://localhost:4200")
 public class PriorityController {
 
     // доступ к данным из БД

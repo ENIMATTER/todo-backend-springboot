@@ -1,7 +1,6 @@
 package com.tasklist.backendspringboot.controller;
 
 import com.tasklist.backendspringboot.service.TaskService;
-import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +17,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/task") // базовый адрес
+@CrossOrigin(origins = "http://localhost:4200")
 public class TaskController {
 
     private final TaskService taskService; // сервис для доступа к данным (напрямую к репозиториям не обращаемся)

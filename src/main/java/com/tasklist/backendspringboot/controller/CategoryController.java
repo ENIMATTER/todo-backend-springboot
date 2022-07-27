@@ -14,6 +14,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping ("/category") // базовый адрес
+@CrossOrigin(origins = "http://localhost:4200")
 public class CategoryController {
 
     // доступ к данным из БД
