@@ -2,6 +2,9 @@ package com.tasklist.backendspringboot.controller;
 
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +35,7 @@ public class TaskController {
 
         MyLogger.showMethodName("task: findAll() ---------------------------------------------------------------- ");
 
-        return  ResponseEntity.ok(taskRepository.findAll());
+        return ResponseEntity.ok(taskRepository.findAll());
     }
 
     // добавление
@@ -94,9 +97,9 @@ public class TaskController {
         // здесь показан пример, как можно обрабатывать исключение и отправлять свой текст/статус
         try {
             taskRepository.deleteById(id);
-        }catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             e.printStackTrace();
-            return new ResponseEntity("id = "+id+" not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity("id = " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
         return new ResponseEntity(HttpStatus.OK); // просто отправляем статус 200 (операция прошла успешно)
     }
@@ -112,21 +115,21 @@ public class TaskController {
 
         // можно обойтись и без try-catch, тогда будет возвращаться полная ошибка (stacktrace)
         // здесь показан пример, как можно обрабатывать исключение и отправлять свой текст/статус
-        try{
+        try {
             task = taskRepository.findById(id).get();
-        }catch (NoSuchElementException e){ // если объект не будет найден
+        } catch (NoSuchElementException e) { // если объект не будет найден
             e.printStackTrace();
-            return new ResponseEntity("id = "+id+" not found", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity("id = " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return  ResponseEntity.ok(task);
+        return ResponseEntity.ok(task);
     }
 
 
     // поиск по любым параметрам
     // TaskSearchValues содержит все возможные параметры поиска
     @PostMapping("/search")
-    public ResponseEntity<List<Task>> search(@RequestBody TaskSearchValues taskSearchValues) {
+    public ResponseEntity<Page<Task>> search(@RequestBody TaskSearchValues taskSearchValues) {
 
         MyLogger.showMethodName("task: search() ---------------------------------------------------------------- ");
 
@@ -138,14 +141,29 @@ public class TaskController {
         String text = taskSearchValues.getTitle() != null ? taskSearchValues.getTitle() : null;
 
         // конвертируем Boolean в Integer
-        Integer completed = taskSearchValues.getCompleted() != null ?  taskSearchValues.getCompleted() : null;
+        Integer completed = taskSearchValues.getCompleted() != null ? taskSearchValues.getCompleted() : null;
 
         Long priorityId = taskSearchValues.getPriorityId() != null ? taskSearchValues.getPriorityId() : null;
         Long categoryId = taskSearchValues.getCategoryId() != null ? taskSearchValues.getCategoryId() : null;
 
+        String sortColumn = taskSearchValues.getSortColumn() != null ? taskSearchValues.getSortColumn() : null;
+        String sortDirection = taskSearchValues.getSortDirection() != null ? taskSearchValues.getSortDirection() : null;
+
+        Integer pageSize = taskSearchValues.getPageSize() != null ? taskSearchValues.getPageSize() : null;
+        Integer pageNumber = taskSearchValues.getPageNumber() != null ? taskSearchValues.getPageNumber() : null;
+
+        Sort.Direction direction = sortDirection == null || sortDirection.trim().equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        // объект сортировки
+        Sort sort = Sort.by(direction, sortColumn);
+
+        // объект постраничности
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+
+        Page result = taskRepository.findByParams(text, completed, priorityId, categoryId, pageRequest);
 
         // результат запроса
-        return ResponseEntity.ok(taskRepository.findByParams(text, completed, priorityId, categoryId));
+        return ResponseEntity.ok(result);
 
     }
 
