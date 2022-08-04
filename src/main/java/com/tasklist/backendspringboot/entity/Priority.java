@@ -15,8 +15,6 @@ public class Priority {
     private String title;
     private String color;
 
-    // указываем, что поле заполняется в БД
-    // нужно, когда добавляем новый объект и он возвращается уже с новым id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")

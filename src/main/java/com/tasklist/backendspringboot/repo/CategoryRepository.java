@@ -8,7 +8,6 @@ import com.tasklist.backendspringboot.entity.Category;
 
 import java.util.List;
 
-// принцип ООП: абстракция-реализация - здесь описываем все доступные способы доступа к данным
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 

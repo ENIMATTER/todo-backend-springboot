@@ -8,13 +8,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.tasklist.backendspringboot.entity.Task;
 
-import java.util.List;
-
-// принцип ООП: абстракция-реализация - здесь описываем все доступные способы доступа к данным
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
     
-    // учитываем, что параметр может быть null или пустым
     @Query("SELECT p FROM Task p where " +
             "(:title is null or :title='' or lower(p.title) like lower(concat('%', :title,'%'))) and" +
             "(:completed is null or p.completed=:completed) and " +
